@@ -1,46 +1,83 @@
-const express = require('express');
+const express = require("express");
+const res = require("express/lib/response");
 const app = express();
 
-app.use(express.json()); 
-app.listen(4000);
+app.use(express.json());
+app.listen(3000);
 
-let users={};
-
-
-// to get data
-app.get('/user',(req,res)=>{
-    res.send(users);
-})
-
-
-// to post data
-app.post('/user',(req,res)=>{
-    console.log(req.body);
-    users = req.body;
-    res.json({
-        message:"Data recived Successfully",
-        user:req.body
-    });
-});
-
-
-// to update data
-app.patch('/user', (req,res)=>{
-    console.log('req.body => ', req.body);
-    let updatData = req.body;
-    for(key in updatData){
-        users[key] = updatData[key];
+let users = [
+    {
+        id: 1,
+        name:"Shashank",
+    },
+    {
+        id: 2,
+        name:"Shreya",
+    },
+    {
+        id: 3,
+        name: "Navneet",
     }
-    res.json({
-        message:"Data updated Successfully",
-    })
-})
+];
 
-// to delete
-app.delete('/user', (req,res)=>{
-    users={};
-    res.json({
-        message:"Data has been deleted",
-    })
+const useRouter = express.Router();
+app.use("/user", useRouter);
 
-})
+useRouter
+  .route("/")
+  .get(getUser)
+  .post(postUser)
+  .patch(updateUser)
+  .delete(deleteUser);
+
+useRouter.route("/:id").get(getUserById);
+
+function getUser(req, res) {
+    res.send(users);
+}
+
+function postUser(req, res) {
+  // console.log(req.body);
+  users = req.body;
+  res.json({
+    message: "Data recived Successfully",
+    user: req.body,
+  });
+}
+
+function updateUser(req, res) {
+  // console.log('req.body => ', req.body);
+  let updatData = req.body;
+  for (key in updatData) {
+    users[key] = updatData[key];
+  }
+  res.json({
+    message: "Data updated Successfully",
+  });
+}
+
+function deleteUser(req, res) {
+  users = {};
+  res.json({
+    message: "Data has been deleted",
+  });
+}
+
+function getUserById(req, res) {
+  console.log(req.params.id);
+
+  let paramId = req.params.id;
+
+  let obj = {};
+
+  for (let i = 0; i < users.length; i++) {
+    if (users[i]["id"] == paramId) {
+      obj = users[i];
+    }
+  }
+
+  res.json({
+    message: "Request recived",
+    data: obj,
+  });
+}
