@@ -1,6 +1,6 @@
 const express = require("express");
-const { use } = require("express/lib/application");
 const mongoose = require('mongoose');
+var emailValidator = require("email-validator");
 const app = express();
 var path = require('path');
 
@@ -25,7 +25,10 @@ const userSchema = mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        validate : function(){
+            return emailValidator.validate(this.email);
+        }
     },
     password:{
         type:String,
@@ -34,8 +37,16 @@ const userSchema = mongoose.Schema({
     },
     confirmPassword:{
         type:String,
-        minLength:8
+        required:true,
+        minLength:8,
+        validate: function(){
+            return this.password == this.confirmPassword
+        }
     }
+})
+
+userSchema.pre('save', function(){
+    this.confirmPassword = undefined;
 })
 
 const userModel = mongoose.model('userModal',userSchema);
