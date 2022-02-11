@@ -1,8 +1,9 @@
+const { log } = require("console");
 const express = require("express");
+const mongoose = require('mongoose');
 const app = express();
 var path = require('path');
 
-app.use(express.urlencoded({extended: true}));
 
 app.use(express.json());
 app.listen(3000);
@@ -106,3 +107,49 @@ function postSignUp(req,res){
         data: obj
     });
 }
+
+const db_link = 'mongodb+srv://admin:efne5Yqy6cS4POtf@cluster0.bcdxl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority';
+mongoose.connect(db_link)
+.then(function(db){
+    console.log('db connected');
+})
+.catch(function(err){
+    console.log(err);
+});
+
+const userSchema = mongoose.Schema({
+    name:{
+        type:String,
+        required:true
+    },
+    email:{
+        type:String,
+        required:true,
+        unique:true
+    },
+    password:{
+        type:String,
+        required:true,
+        minLength:8
+    },
+    confirmPassword:{
+        type:String,
+        required:true,
+        minLength:8
+    }
+})
+
+const userModel = mongoose.model('userModal',userSchema);
+
+(async function createUser(){
+    let user = {
+        name:'Navneet',
+        email:'Navneet@gmail.com',
+        password: '12345678',
+        confirmPassword: '12345678'
+    }
+
+    let data = await userModel.create(user);
+    console.log(data);
+
+})();
