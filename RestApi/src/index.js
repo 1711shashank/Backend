@@ -25,7 +25,7 @@ const server = http.createServer((req,res) => {
 
 })
 
-server.listen(3000, ()=>{
+server.listen(1000, ()=>{
     console.log('Server started on port 3000')
     let num = _.random(0,20);
     console.log(num);

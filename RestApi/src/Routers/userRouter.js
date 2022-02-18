@@ -1,99 +1,35 @@
-const express = require("express");
-const userModel = require('../models/userModel');
-const { cookie } = require("express/lib/response");
-const req = require("express/lib/request");
-const protectRoute = require('./authHelper');
+// const express = require("express");
+// const {getUser, updateUser, deleteUser, getAllUser} = require('../controller/userController');
+// const {protectRoute, isAuthorised, signup, login} = require('../controller/authController');
 
-const userRouter = express.Router();
+// const app = express();
+// app.listen(5000);
+// const userRouter = express.Router();
 
-userRouter
-  .route("/")
-  .get(protectRoute, getUsers)
-  .post(postUser)
-  .patch(updateUser)
-  .delete(deleteUser);
+// //user options
+// userRouter
+//   .route("/:id")
+//   .patch(updateUser)
+//   .delete(deleteUser)
 
-userRouter.route("/:id").get(getUserById);
+// userRouter
+// .route('/signup')
+// .post(signup)
 
-userRouter.route("/setCookies").get(setCookies);
+// userRouter
+// .route('/login')
+// .post(login)
 
-userRouter.route("/getCookies").get(getCookies);
+// // profile page
+// app.use(protectRoute);
+// userRouter
+//   .route('/userProfile')
+//   .get(getUser)
 
-async function getUsers(req, res) {
-  let allUsers = await userModel.find();
+// //admin function
+// app.use(isAuthorised(['admin']));
+// userRouter
+//   .route('')
+//   .get(getAllUser);
 
-  res.json({
-    message: "List of all users",
-    data: allUsers,
-  });
-}
-
-async function postUser(req, res) {
-  let dataObj = req.body;
-  let user = await userModel.create(dataObj);
-
-  console.log("BackEnd", user);
-  res.json({
-    message: "Data added",
-    data: user,
-  });
-}
-
-async function updateUser(req, res) {
-  let dataToBeUpdated = req.body;
-  let user = await userModel.findOneAndUpdate(
-    { email: "abc@gmail.com" },
-    dataToBeUpdated
-  );
-  res.json({
-    message: "Data updated Successfully",
-    data: user,
-  });
-}
-
-async function deleteUser(req, res) {
-  let dataToBeDeleted = req.body;
-  let user = await userModel.findOneAndDelete(dataToBeDeleted);
-  res.json({
-    message: "Data has been deleted",
-    data: user,
-  });
-}
-
-function getUserById(req, res) {
-    //   console.log(req.params.id);
-
-    // let paramId = req.params.id;
-
-    // let obj = {};
-
-    // for (let i = 0; i < users.length; i++) {
-    //     if (users[i]["id"] == paramId) {
-    //         obj = users[i];
-    //     }
-    // }
-
-    // res.json({
-    //     message: "Request recived",
-    //     data: obj,
-    // });
-}
-
-async function setCookies(req,res){
-    
-    res.cookie('isLoggedIn',true,{maxAge:1000*60 ,secure:true, httpOnly:true});
-    res.cookie('isPrimeMember',true);
-    res.send('Cookies has been set');
-}
-
-function getCookies(req,res){
-    
-    let cookie= req.cookie;
-    console.log(cookie);
-    res.send('Cookies received')
-
-}
-
-
-
-module.exports = userRouter;
+// module.exports = userRouter;

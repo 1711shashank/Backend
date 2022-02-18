@@ -2,7 +2,7 @@ const express = require("express");
 const userModel = require('../models/userModel');
 var path = require('path');
 const res = require("express/lib/response");
-const { cookies } = require("express/lib/response");
+const { cookies, redirect } = require("express/lib/response");
 const cookieParser = require('cookie-parser');
 const { compareSync } = require("bcrypt");
 const jwt = require('jsonwebtoken');
@@ -16,14 +16,14 @@ authRouter
 .get(getSignUp)
 .post(postSignUp);
 
-authRouter
-.route("/login")
-.get(getloginUser)
-.post(postloginUser);
+// authRouter
+// .route("/login")
+// .get(getloginUser)
+// .post(postloginUser);
 
 
 function getSignUp(req,res){
-    res.sendFile(path.join(__dirname, '../public/index.html'));
+    res.sendFile(path.join(__dirname, '../view/index.html'));
 }
 async function postSignUp(req,res){
     let dataObj = req.body;
@@ -31,10 +31,7 @@ async function postSignUp(req,res){
 
     console.log("BackEnd", user);
 
-    res.json({
-        message: "User signed Up",
-        data: user
-    });
+    res.send({redirect: '/'});              // not working
 }
 
 function getloginUser(req,res){
@@ -85,7 +82,5 @@ async function postloginUser(req,res){
     }
 
 }
-
-
 
 module.exports = authRouter;

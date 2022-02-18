@@ -7,8 +7,8 @@ const db_link =
 
 mongoose
     .connect(db_link)
-    .then(function (db) {
-        console.log("db connected");
+    .then(function () {
+        console.log("db connected Backend Reop");
     })
     .catch(function (err) {
         console.log(err);
@@ -18,20 +18,20 @@ mongoose
 const userSchema = mongoose.Schema({
     name: {
         type: String,
-        required: true,
+        // required: true,
     },
     email: {
         type: String,
-        required: true,
-        unique: true,
-        validate: function () {
-            return emailValidator.validate(this.email);
-        },
+        // required: true,
+        // unique: true,
+        // validate: function () {
+        //     return emailValidator.validate(this.email);
+        // },
     },
     password: {
         type: String,
-        required: true,
-        minLength: 8,
+        // required: true,
+        // minLength: 8,
     },
     confirmPassword: {
         type: String,
@@ -41,15 +41,15 @@ const userSchema = mongoose.Schema({
         //     return this.password == this.confirmPassword
         // }
     },
-    role: {
-        type: String,
-        enum: ["admin", "user", "restaurantOwner", "deliveryBoy"],
-        default: "user",
-    },
-    profileImage: {
-        type:String,
-        // default:'img/users/default.jpg'
-    },
+    // role: {
+    //     type: String,
+    //     enum: ["admin", "user", "restaurantOwner", "deliveryBoy"],
+    //     default: "user",
+    // },
+    // profileImage: {
+    //     type:String,
+    //     // default:'img/users/default.jpg'
+    // },
 });
 
 // userSchema.pre('save', function(){
